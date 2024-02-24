@@ -1,7 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'keys.dart';
 
 void main() {
-  runApp(const MyApp());
+  if (kDebugMode) {
+    print(Keys.apiKey);
+  }
+  if (kDebugMode) {
+    print(Keys.secretKey);
+  }
+
+  //runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
