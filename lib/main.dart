@@ -1,15 +1,29 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lixplor/spotify_auth.dart';
+//import 'package:lixplor/spotify_auth.dart';
 import 'keys.dart';
 
-void main() {
+Future<void> main() async {
   if (kDebugMode) {
     print(Keys.apiKey);
   }
   if (kDebugMode) {
     print(Keys.secretKey);
   }
+  var token = await getToken(Keys.apiKey, Keys.secretKey);
 
+  var aristName = "Aurora";
+  try {
+    var artist = await searchForArtist(token, aristName);
+    if (kDebugMode) {
+      print('Artist: $artist');
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e);
+    }
+  }
   //runApp(const MyApp());
 }
 

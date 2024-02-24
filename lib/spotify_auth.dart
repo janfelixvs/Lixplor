@@ -1,21 +1,62 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 import 'keys.dart';
 
-class SpotifyAuth {
-  late String authString;
-  late List<int> authBytes;
-  late String authBase64;
-  String url = "https://accounts.spotify.com/api/token";
-  late Map<String, String> headers;
+Future<String> getToken(String clientId, String clientSecret) async {
+  var authString = "${Keys.apiKey}:${Keys.secretKey}";
+  var authBytes = utf8.encode(authString);
+  var authBase64 = base64Encode(authBytes);
 
-  SpotifyAuth() {
-    authString = "${Keys.apiKey}:${Keys.secretKey}";
-    authBytes = utf8.encode(authString);
-    authBase64 = base64Encode(authBytes);
-    headers = {
-      "Authorization": "Basic $authBase64",
-      "Content-Type": "application/x-www-form-urlencoded"
-    };
+  var url = "https://accounts.spotify.com/api/token";
+
+  var headers = {
+    "Authorization": "Basic $authBase64",
+    "Content-Type": "application/x-www-form-urlencoded"
+  };
+
+  var data = {"grant_type": "client_credentials"};
+
+  var response = await http.post(Uri.parse(url), headers: headers, body: data);
+
+  if (response.statusCode == 200) {
+    var jsonResult = jsonDecode(response.body);
+    var token = jsonResult["access_token"];
+    return token;
+  } else {
+    throw Exception('Failed to load token');
+  }
+}
+
+Map<String, String> getAuthHeader(String token) {
+  return {"Authorization": "Bearer $token"};
+}
+
+Future<Map<String, dynamic>?> searchForArtist(
+    String token, String artistName) async {
+  var url = Uri.parse('https://api.spotify.com/v1/search');
+  var headers = getAuthHeader(token);
+
+  var queryParameters = {
+    "q": artistName,
+    "type": "artist",
+    "limit": "1",
+  };
+
+  var response = await http.get(url.replace(queryParameters: queryParameters),
+      headers: headers);
+
+  if (response.statusCode == 200) {
+    var jsonResult = jsonDecode(response.body)['artists']['items'] as List;
+    if (jsonResult.isEmpty) {
+      if (kDebugMode) {
+        print('No artist found with this name');
+      }
+      return null;
+    }
+    return jsonResult[0] as Map<String, dynamic>;
+  } else {
+    throw Exception('Failed to load artist');
   }
 }
