@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import 'keys.dart';
-
 Future<String> getToken(String clientId, String clientSecret) async {
-  var authString = "${Keys.apiKey}:${Keys.secretKey}";
+  var authString = "$clientId:$clientSecret";
   var authBytes = utf8.encode(authString);
   var authBase64 = base64Encode(authBytes);
 

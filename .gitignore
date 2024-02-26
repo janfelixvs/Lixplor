@@ -26,3 +26,4 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 lib/keys.dart
+lib/env/env.g.dart

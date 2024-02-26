@@ -2,16 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lixplor/spotify_auth.dart';
 //import 'package:lixplor/spotify_auth.dart';
-import 'keys.dart';
+import 'package:lixplor/env/env.dart';
 
 Future<void> main() async {
+  String clientID = Env.clientId;
+  String secretKey = Env.secretKey;
+
   if (kDebugMode) {
-    print(Keys.apiKey);
+    print(clientID);
   }
   if (kDebugMode) {
-    print(Keys.secretKey);
+    print(secretKey);
   }
-  var token = await getToken(Keys.apiKey, Keys.secretKey);
+  var token = await getToken(clientID, secretKey);
 
   var aristName = "Aurora";
   try {
