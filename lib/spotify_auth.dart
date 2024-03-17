@@ -60,18 +60,18 @@ Future<Map<String, dynamic>?> searchForArtist(
   }
 }
 
-Future<void> searchArtist(String text) async {
+Future<String> searchArtist(String text) async {
   String clientID = Env.clientId;
   String secretKey = Env.secretKey;
   var token = await getToken(clientID, secretKey);
   try {
     var artist = await searchForArtist(token, text);
-    if (kDebugMode) {
-      print('Artist: $artist');
-    }
+    String imageUrl = artist!['images'][0]['url'];
+    return imageUrl;
   } catch (e) {
     if (kDebugMode) {
       print(e);
     }
+    return 'Error occurred while searching for artist';
   }
 }

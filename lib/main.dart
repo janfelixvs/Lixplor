@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lixplor/spotify_auth.dart';
 
@@ -47,8 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: _controller,
             ),
             ElevatedButton(
-              onPressed: () {
-                searchArtist(_controller.text);
+              onPressed: () async {
+                if (kDebugMode) {
+                  print(await searchArtist(_controller.text));
+                }
               },
               child: const Text('Search'),
             )
