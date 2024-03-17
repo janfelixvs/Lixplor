@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:lixplor/env/env.dart';
 
 Future<String> getToken(String clientId, String clientSecret) async {
   var authString = "$clientId:$clientSecret";
@@ -56,5 +57,21 @@ Future<Map<String, dynamic>?> searchForArtist(
     return jsonResult[0] as Map<String, dynamic>;
   } else {
     throw Exception('Failed to load artist');
+  }
+}
+
+Future<void> searchArtist(String text) async {
+  String clientID = Env.clientId;
+  String secretKey = Env.secretKey;
+  var token = await getToken(clientID, secretKey);
+  try {
+    var artist = await searchForArtist(token, text);
+    if (kDebugMode) {
+      print('Artist: $artist');
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e);
+    }
   }
 }
