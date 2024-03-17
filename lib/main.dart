@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lixplor/spotify_auth.dart';
-import 'package:lixplor/env/env.dart';
 
 void main() {
   runApp(const MyApp());
