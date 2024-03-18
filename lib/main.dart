@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lixplor/spotify_auth.dart';
+import 'package:lixplor/connection/search.dart';
+import 'package:lixplor/connection/spotify_auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,7 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () async {
                 if (kDebugMode) {
-                  print(await searchArtist(_controller.text));
+                  SpotifyAuth a = SpotifyAuth();
+                  await a.getToken();
+                  print(a.token);
+                  //var test = Search().searchForArtist(a, _controller.text, 1);
+                  //print(test);
                 }
               },
               child: const Text('Search'),
