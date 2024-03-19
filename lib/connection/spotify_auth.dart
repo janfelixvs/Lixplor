@@ -1,46 +1,53 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:lixplor/env/env.dart';
 
 class SpotifyAuth {
   String clientID;
   String secretKey;
-  late String token;
+  String token;
+  late DateTime createTime;
 
   String baseURL = "https://api.spotify.com/v1/";
 
   SpotifyAuth()
       : clientID = Env.clientId,
-        secretKey = Env.secretKey;
+        secretKey = Env.secretKey,
+        token = "";
 
   Map<String, String> getAuthHeader() {
     return {"Authorization": "Bearer $token"};
   }
 
   Future<void> getToken() async {
-    var authString = "$clientID:$secretKey";
-    var authBytes = utf8.encode(authString);
-    var authBase64 = base64Encode(authBytes);
+    if (token.isEmpty || DateTime.now().difference(createTime).inHours > 12) {
+      var authString = "$clientID:$secretKey";
+      var authBytes = utf8.encode(authString);
+      var authBase64 = base64Encode(authBytes);
 
-    var url = "https://accounts.spotify.com/api/token";
+      var url = "https://accounts.spotify.com/api/token";
 
-    var headers = {
-      "Authorization": "Basic $authBase64",
-      "Content-Type": "application/x-www-form-urlencoded"
-    };
+      var headers = {
+        "Authorization": "Basic $authBase64",
+        "Content-Type": "application/x-www-form-urlencoded"
+      };
 
-    var data = {"grant_type": "client_credentials"};
+      var data = {"grant_type": "client_credentials"};
 
-    var response =
-        await http.post(Uri.parse(url), headers: headers, body: data);
+      var response =
+          await http.post(Uri.parse(url), headers: headers, body: data);
 
-    if (response.statusCode == 200) {
-      var jsonResult = jsonDecode(response.body);
-      var newToken = jsonResult["access_token"];
-      print(newToken);
-      token = newToken;
-    } else {
-      throw Exception('Failed to load token');
+      if (response.statusCode == 200) {
+        var jsonResult = jsonDecode(response.body);
+        token = jsonResult["access_token"];
+        createTime = DateTime.now();
+      } else {
+        throw Exception('Failed to load token');
+      }
+    }
+    if (kDebugMode) {
+      print(token);
     }
   }
 }
