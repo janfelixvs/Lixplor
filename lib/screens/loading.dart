@@ -19,7 +19,21 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+        body: Center(
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.blue, Colors.red],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [Text('App is loading')],
+        ),
+      ),
+    ));
   }
 }

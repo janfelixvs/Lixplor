@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lixplor/screens/vanilla.dart';
+import 'package:lixplor/screens/loading.dart';
 
 void main() {
   runApp(const LixplorRoot());
@@ -16,7 +16,7 @@ class LixplorRoot extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const Loading(),
     );
   }
 }
